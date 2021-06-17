@@ -1,7 +1,9 @@
 # DHPSFU
 Script to find double-dots and extract molecular coordinates from DHPSF microscopy data, pre-processed by extracting single localisations.
 
-Author: Aleks Ponjavic, University of Leeds; Aleksandra Jartseva, University of Cambridge
+_Authors: Aleks Ponjavic, University of Leeds; Aleksandra Jartseva, University of Cambridge_
+
+To run this, you need both the main script DHPSFUAngle.m and the auxiliary function calibAngle.m in your working directory. Open DHPSFUAngle.m, edit the necessary parameters, and run it.
 
 ## Inputs - files:
 - Data for analysis in the form of a text file containing a list of single localisations. To enhance batch processing, the code loops through all files with the correct extension in the supplied folder.
