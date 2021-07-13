@@ -32,8 +32,8 @@ outputFolder = '';
 pixelSize = 271; %nm
 precision = 70; %cutoff in nm
 calibStep = 40; %nm
-rangeToFit = [900 4100]; %range for fitting, nm for z and radians for angle
-ZorAngle = 'Z'; %is rangeToFit wrt 'Angle' or 'Z' coordinate?
+rangeToFit = [600 3800]; %range for fitting, nm for z and radians for angle
+ZorAngleorFrame = 'Z'; %is rangeToFit wrt 'Angle' or 'Z' coordinate, or 'Frame'?
 
 initDistFilt = [8 3]; %top and bottom limits for distance between dots in pixels; best left lenient if subsequent filters enabled
 filterOut = true; %enable/disable all filters
@@ -45,7 +45,7 @@ intDev = 1; %allowed deviation of the ratio of the intensities, compared to cali
 
 %% Calibration %%
 
-[dx dy dz dd dr aRange] = calibAngle([calibFolder calib], calibStep, 'rangeToFit', rangeToFit, 'ZorAngle', ZorAngle);
+[dx dy dz dd dr aRange] = calibAngle([calibFolder calib], calibStep, 'rangeToFit', rangeToFit, 'ZorAngleorFrame', ZorAngleorFrame);
 
 %% Looping %%
 files = dir(fullfile(folder, ['*' ext]));
