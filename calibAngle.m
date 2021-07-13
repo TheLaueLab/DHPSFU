@@ -3,7 +3,7 @@
 % The outputs are polynomial functions, describing the dependency of the z coordinate, the distance between the dots and the ratio of their intensities on the angle, as well as the dependency of the xy coordinates on the position in z. The final output value is the angular range of this particular calibration.
 
 function [dx dy dz dd dr aRange] = calib( fileN,step,varargin)
-params = struct('cols', [10 11 9 1], 'rangeToFit', [900 4100], 'ZorAngle', 'Z');
+params = struct('cols', [10 11 9 1], 'rangeToFit', [600 3800], 'ZorAngleorFrame', 'Z');
 paramNames = fieldnames(params);
 
 nArgs = length(varargin);
@@ -22,7 +22,7 @@ end
 
 cols = params.cols;
 rangeToFit = params.rangeToFit;
-ZorAngle = params.ZorAngle;
+ZorAngleorFrame = params.ZorAngleorFrame;
 
 x1 = [];
 x2 = [];
@@ -88,10 +88,12 @@ end
 xAll = mean([x1 x2],2);
 yAll = mean([y1 y2],2);
 
-if ZorAngle == 'Z'
+if ZorAngleorFrame == 'Z'
     idx = find((fAll*step > rangeToFit(1)) & (fAll*step < rangeToFit(2)));
-elseif ZorAngle == 'Angle'
+elseif ZorAngleorFrame == 'Angle'
     idx = find((aAll > rangeToFit(1)) & (aAll < rangeToFit(2)));
+elseif ZorAngleorFrame == 'Frame'
+    idx = find((fAll > rangeToFit(1)) & (fAll < rangeToFit(2)));
 end
 xAll = xAll(idx);
 yAll = yAll(idx);
