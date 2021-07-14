@@ -23,6 +23,7 @@ folder = ''; %folder with data
 %fT = 'Pos1_slice2_PF70nm'; %filename of the data file, without extension
 ext = '.xls'; %extension of the data file
 cols = [10 11 9 1 14]; % the column numbers, corresponding to the following info: [x y intensity frame precision]
+skip = 9; %how many lines to skip when reading in data (i.e. num lines in header)
 
 calibFolder = '';
 calib = 'calib.xls';
@@ -67,7 +68,12 @@ fAll = x1;
 dAll = x1;
 rAll = x1;
 
-data = dlmread([folder fT ext],'\t',9,0);
+try
+    data = dlmread([folder fT ext],'\t',skip,0);
+catch
+    disp(['Error reading file ' folder fT ext ', maybe empty. Continuing...']);
+    continue
+end
 data(find(data(:,cols(5))>precision),:)=[]; %precision cutoff
 
 %% For each frame, find all pairs of dots that are at an appropriate distance from each other to be lobes of DHPSF, determinae and record their xy coordinates, the angle, the distance between them, their intensity ratio and average intensity %%
@@ -193,10 +199,14 @@ end
 % scatter(xN,yN,0.2,zN)
 % axis equal
 
-disp(['Locs = ' num2str(length(xN))])
-
 %% Write the result %%
-mkdir(outputFolder);
-dlmwrite([outputFolder fT '.3d'],[xN yN zN iAll fAll],'delimiter','\t','precision',7);
+if (length(xN) > 0)
+    disp(['Locs = ' num2str(length(xN))])
+
+    mkdir(outputFolder);
+    dlmwrite([outputFolder fT '.3d'],[xN yN zN iAll fAll],'delimiter','\t','precision',7);
+else
+    disp(['Locs = ' num2str(length(xN)) ', output not written'])
+end
 
 end
