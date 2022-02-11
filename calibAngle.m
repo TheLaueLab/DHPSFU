@@ -89,11 +89,11 @@ xAll = mean([x1 x2],2);
 yAll = mean([y1 y2],2);
 
 if ZorAngleorFrame == 'Z'
-    idx = find((fAll*step > rangeToFit(1)) & (fAll*step < rangeToFit(2)));
+    idx = find((fAll*step >= rangeToFit(1)) & (fAll*step <= rangeToFit(2)));
 elseif ZorAngleorFrame == 'Angle'
-    idx = find((aAll > rangeToFit(1)) & (aAll < rangeToFit(2)));
+    idx = find((aAll >= rangeToFit(1)) & (aAll <= rangeToFit(2)));
 elseif ZorAngleorFrame == 'Frame'
-    idx = find((fAll > rangeToFit(1)) & (fAll < rangeToFit(2)));
+    idx = find((fAll >= rangeToFit(1)) & (fAll <= rangeToFit(2)));
 end
 xAll = xAll(idx);
 yAll = yAll(idx);
