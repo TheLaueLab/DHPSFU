@@ -33,7 +33,7 @@ outputFolder = '';
 pixelSize = 271; %nm
 precision = 70; %cutoff in nm
 calibStep = 40; %nm
-rangeToFit = [600 3800]; %range for fitting, nm for z and radians for angle
+rangeToFit = [600 3800]; %range for fitting (closed interval), nm for z and radians for angle
 ZorAngleorFrame = 'Z'; %is rangeToFit wrt 'Angle' or 'Z' coordinate, or 'Frame'?
 
 initDistFilt = [8 3]; %top and bottom limits for distance between dots in pixels; best left lenient if subsequent filters enabled
