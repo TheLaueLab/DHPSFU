@@ -24,9 +24,11 @@ folder = ''; %folder with data
 ext = '.xls'; %extension of the data file
 cols = [10 11 9 1 14]; % the column numbers, corresponding to the following info: [x y intensity frame precision]
 skip = 9; %how many lines to skip when reading in data (i.e. num lines in header)
+separator = ','; %separator in the data file, typically either '\t' or ','
 
 calibFolder = '';
 calib = 'calib.xls';
+sepCalib = '\t'; %separator in the calibration file, typically either '\t' or ','
 
 outputFolder = '';
 
@@ -46,7 +48,7 @@ intDev = 1; %allowed deviation of the ratio of the intensities, compared to cali
 
 %% Calibration %%
 
-[dx dy dz dd dr aRange] = calibAngle([calibFolder calib], calibStep, 'rangeToFit', rangeToFit, 'ZorAngleorFrame', ZorAngleorFrame);
+[dx dy dz dd dr aRange] = calibAngle([calibFolder calib], sepCalib, calibStep, 'rangeToFit', rangeToFit, 'ZorAngleorFrame', ZorAngleorFrame);
 
 %% Looping %%
 files = dir(fullfile(folder, ['*' ext]));
@@ -69,7 +71,7 @@ dAll = x1;
 rAll = x1;
 
 try
-    data = dlmread([folder fT ext],'\t',skip,0);
+    data = dlmread([folder fT ext],separator,skip,0);
 catch
     disp(['Error reading file ' folder fT ext ', maybe empty. Continuing...']);
     continue
