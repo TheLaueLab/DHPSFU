@@ -2,7 +2,7 @@
 % It takes the calibration Peak Fit result file as the first argument, the step in z between consecutive frames as its second obligatory argument. Optional arguments include the column numbers in the file, corresponding to [x y intensity frame]; and the range in which to fit the data, either wrt angle/pitch of the double helix or the z coordinate. The optional arguments have defaults. Default column numbers correspond to the current formatting of Peak Fit results.
 % The outputs are polynomial functions, describing the dependency of the z coordinate, the distance between the dots and the ratio of their intensities on the angle, as well as the dependency of the xy coordinates on the position in z. The final output value is the angular range of this particular calibration.
 
-function [dx dy dz dd dr aRange] = calib( fileN,step,varargin)
+function [dx dy dz dd dr aRange] = calib( fileN,sepCalib,step,varargin)
 params = struct('cols', [10 11 9 1], 'rangeToFit', [600 3800], 'ZorAngleorFrame', 'Z');
 paramNames = fieldnames(params);
 
@@ -35,7 +35,7 @@ fAll = [];
 ratAll = [];
 distAll = [];
 
-data = dlmread(fileN,'\t',9,0);
+data = dlmread(fileN,sepCalib,9,0);
 
 %% For each frame, find the two lobes, extract their xy coordinates, the distance and the angle between them, their intensities and the ratio of the intensities %%
 for i = 1:max(data(:,cols(4))) %iteration through frames
