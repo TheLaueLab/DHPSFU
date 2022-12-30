@@ -3,6 +3,7 @@
 % Inputs - files:
 % - Data for analysis in the form of a text file containing a list of single localisations, with coordinates in pixels. The recommended fitting software is GDSC SMLM PeakFit. To enhance batch processing, the code loops through all files with the correct extension in the supplied folder.
 % - Calibration file, similarly formatted. The calibration must contain a single fiducial, imaged at equally-spaced z-coordinates in the desired range. E.g. it could have been imaged every 50 nm from -2 um to 2 um in z. NB! There must be one frame per z-coordinate, i.e. there must be a one-step movement between each frame.
+% --- Update: since implementing the tilt correction, using multiple beads, user needs to supply the folder, containing calibration files, one per bead, formatted as above. Importantly, the xy coordinates should correspond to the original position of the bead in the full FOV/ROI used for imaging.
 
 % Inputs - parameters:
 % - Pixel size
@@ -27,7 +28,7 @@ skip = 9; %how many lines to skip when reading in data (i.e. num lines in header
 separator = ','; %separator in the data file, typically either '\t' or ','
 
 calibFolder = '';
-calib = 'calib.xls';
+%calib = 'calib.xls';
 sepCalib = '\t'; %separator in the calibration file, typically either '\t' or ','
 
 outputFolder = '';
@@ -47,8 +48,8 @@ filterRat = true; %filter based on the ratio of intensities between the dots
 intDev = 1; %allowed deviation of the ratio of the intensities, compared to calibration
 
 %% Calibration %%
-
-[dx dy dz dd dr aRange] = calibAngle([calibFolder calib], sepCalib, calibStep, 'rangeToFit', rangeToFit, 'ZorAngleorFrame', ZorAngleorFrame);
+calib = dir(fullfile(calibFolder, ['*' ext]));
+[dx dy dz dd dr aRange] = calibAngle([calibFolder calib], sepCalib, calibStep, 'rangeToFit', rangeToFit, 'ZorAngleorFrame', ZorAngleorFrame, 'cols', cols);
 
 %% Looping %%
 files = dir(fullfile(folder, ['*' ext]));
@@ -164,6 +165,7 @@ yAll = mean([y1 y2],2);
 %% Using the calibration data, find the full coordinates for each molecule %%
 
 zmin = polyval(dz, aRange);
+aAll = aAll - predict(model, [xAll yAll]); %correct the tilt
 zN = polyval(dz,aAll); %find z, using angle
 xN = (xAll-polyval(dx,zN)+polyval(dx, zmin))*pixelSize; %correct x and y for DHPSF-induced displacement, convert to nm
 yN = (yAll-polyval(dy,zN)+polyval(dy, zmin))*pixelSize;
