@@ -49,14 +49,14 @@ intDev = 1; %allowed deviation of the ratio of the intensities, compared to cali
 
 %% Calibration %%
 calib = dir(fullfile(calibFolder, ['*' ext]));
-[dx dy dz dd dr aRange] = calibAngle([calibFolder calib], sepCalib, calibStep, 'rangeToFit', rangeToFit, 'ZorAngleorFrame', ZorAngleorFrame, 'cols', cols);
+[dx dy dz dd dr aRange model] = calibAngle(strcat(calibFolder, {calib.name}), sepCalib, calibStep, 'rangeToFit', rangeToFit, 'ZorAngleorFrame', ZorAngleorFrame, 'cols', cols);
 
 %% Looping %%
 files = dir(fullfile(folder, ['*' ext]));
 fTs = {files.name};
 
-for i=1:numel(fTs)
-fT = regexprep(fTs{i}, ext, '');
+for j=1:numel(fTs)
+fT = regexprep(fTs{j}, ext, '');
 
 %% Read in data, initial precision filter %%
 
@@ -164,7 +164,7 @@ yAll = mean([y1 y2],2);
 
 %% Using the calibration data, find the full coordinates for each molecule %%
 
-zmin = polyval(dz, aRange);
+zmin = polyval(dz, aRange(1));
 aAll = aAll - predict(model, [xAll yAll]); %correct the tilt
 zN = polyval(dz,aAll); %find z, using angle
 xN = (xAll-polyval(dx,zN)+polyval(dx, zmin))*pixelSize; %correct x and y for DHPSF-induced displacement, convert to nm
