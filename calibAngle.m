@@ -105,6 +105,22 @@ end
 xAll = mean([x1 x2],2);
 yAll = mean([y1 y2],2);
 
+%% Exclude the frames outside the specified range %%
+if ZorAngleorFrame == 'Z'
+    idx = find((fAll*step >= rangeToFit(1)) & (fAll*step <= rangeToFit(2)));
+elseif ZorAngleorFrame == 'Angle'
+    idx = find((aAll >= rangeToFit(1)) & (aAll <= rangeToFit(2)));
+elseif ZorAngleorFrame == 'Frame'
+    idx = find((fAll >= rangeToFit(1)) & (fAll <= rangeToFit(2)));
+end
+xAll = xAll(idx);
+yAll = yAll(idx);
+fAll = fAll(idx);
+aAll = aAll(idx);
+distAll = distAll(idx);
+ratAll = ratAll(idx);
+beadID = beadID(idx);
+
 %% Correcting the tilt %%
 %For each bead at each frame, find the relative shift of angle from the mean angle of all beads
 aRel = [];
@@ -127,23 +143,6 @@ end
 model = fitlm([xAvg yAvg], aAvg);
 %Correct the angles
 aAll = aAll - predict(model, [xAll yAll]);
-
-%% Exclude the frames outside the specified range %%
-if ZorAngleorFrame == 'Z'
-    idx = find((fAll*step >= rangeToFit(1)) & (fAll*step <= rangeToFit(2)));
-elseif ZorAngleorFrame == 'Angle'
-    idx = find((aAll >= rangeToFit(1)) & (aAll <= rangeToFit(2)));
-elseif ZorAngleorFrame == 'Frame'
-    idx = find((fAll >= rangeToFit(1)) & (fAll <= rangeToFit(2)));
-end
-xAll = xAll(idx);
-yAll = yAll(idx);
-fAll = fAll(idx);
-aAll = aAll(idx);
-distAll = distAll(idx);
-ratAll = ratAll(idx);
-beadID = beadID(idx);
-
 
 disp(aAll)
 disp(length(aAll))
